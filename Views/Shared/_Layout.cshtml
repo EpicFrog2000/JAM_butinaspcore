@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="menu">
+        <div class="top_info" style="height:110px">
+            <h1 style="text-align:center; padding:15px; font-size:32px;">@ViewData["SecondTitle"]</h1>
+        </div>
+        <hr>
+        <div class="mid_menu">
+            <h2 style="color: rgb(110, 110, 110);">menu</h2>
+            <a href="@Url.Action("Glowna", "Home")" class="menu_elem"><i class="ion-home"></i> Główna</a>
+            @{
+                if (ViewData["Title"] == "Strona Główna")
+                {
+                    <a style="color: yellow; float: right;">Here!</a>
+                }
+            }
+            <hr>
+            <a class="menu_elem" style="color: rgb(110, 110, 110);"><i class="ion-android-settings"></i> Dane ze stronek</a>
+            <ul id="data-sources" class="open">
+                <li>
+                    <a href="@Url.Action("ItPracujpl", "Home")" class="menu_elem"><i class="ion-home"></i> it.pracuj.pl</a>
+                    @{
+                        if (ViewData["Title"] == "Dane z portalu it.pracuj.pl")
+                        {
+                            <a style="color: yellow; float: right;">Here!</a>
+                        }
+                    }
+                </li>
+            </ul>
+            <hr>
+        </div>
+        <div class="lower_menu">
+            <h2 style="text-align: center;">Aktualne typy danych z tej strony</h2>
+            <h3 style="text-align: center;"><a href="#Ostatnio">Ostatnio zebrane dane</a></h3>
+            <ul style="list-style-type: none;">
+                @if (ViewBag.LowerMenuOptions != null)
+                {
+                        @foreach (var tekst in ViewBag.LowerMenuOptions)
+                        {
+                            <li><a>@tekst</a></li>
+                        }
+                    
+                }
+                else
+                {
+                    <p>No lower menu options available.</p>
+                }
+            </ul>
+            <h3 style="text-align: center;"><a href="#Historyczne">Historyczne dane</a></h3>
+            <ul style="list-style-type: none;">
+                @if (ViewBag.LowerMenuhrefs != null)
+                {
+                    @for (int i = 0; i < ViewBag.LowerMenuhrefs.GetLength(1); i++)
+                    {
+                        <li><a href="#@(ViewBag.LowerMenuhrefs[0, i])">@ViewBag.LowerMenuhrefs[1, i]</a></li>
+                    }
+                }
+                else
+                {
+                    <p>No lower menu options available.</p>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        @RenderBody()
+    </div>
+
+        <script>
+        // Funkcja obsługująca przewijanie do elementu z efektem płynnego przewijania
+        function scrollToElement(elementId) {
+            var element = document.getElementById(elementId);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+
+        // Przypisz obsługę kliknięć do rodzica linków (menu)
+        document.getElementById("menu").addEventListener("click", function (e) {
+            e.preventDefault();
+            if (e.target.tagName === "A") {
+                var targetId = e.target.getAttribute("href").substring(1); // Usuń "#" z href
+                scrollToElement(targetId);
+            }
+        });
+    </script>
+
+
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
